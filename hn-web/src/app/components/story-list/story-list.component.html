@@ -1,0 +1,30 @@
+﻿<div class="container">
+  <h1>Hacker News — Newest</h1>
+
+  <form (submit)="$event.preventDefault(); search();" class="search">
+    <input [(ngModel)]="query" name="q" placeholder="Search titles..." />
+    <button type="submit">Search</button>
+  </form>
+
+  <div class="pager">
+    <button (click)="prev()" [disabled]="loading || page <= 1">Prev</button>
+    <span>Page {{page}} / {{ maxPages }}</span>
+    <button (click)="next()" [disabled]="loading || (page * pageSize) >= total">Next</button>
+
+    <label class="ps">Page size:
+      <select [(ngModel)]="pageSize" name="ps" (change)="search()">
+        <option *ngFor="let s of [10,20,50,100]" [value]="s">{{s}}</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="loading" *ngIf="loading">Loading…</div>
+
+  <ul class="list" *ngIf="!loading">
+    <li *ngFor="let s of items; trackBy: trackById">
+      <a [href]="s.link" target="_blank" rel="noopener noreferrer">{{ s.title }}</a>
+    </li>
+  </ul>
+
+  <div class="meta" *ngIf="!loading && total === 0">No stories found.</div>
+</div>
